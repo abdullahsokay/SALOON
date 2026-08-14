@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf6f0;
+  --foreground: #1b1512;
+
+  --color-ink: #1b1512;
+  --color-ink-soft: #4a3f39;
+  --color-cream: #faf6f0;
+  --color-cream-2: #f2ebe1;
+  --color-gold: #b8863f;
+  --color-gold-light: #d9ad6b;
+  --color-gold-deep: #8a611f;
+  --color-line: #e6dcca;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-cream: var(--color-cream);
+  --color-cream-2: var(--color-cream-2);
+  --color-gold: var(--color-gold);
+  --color-gold-light: var(--color-gold-light);
+  --color-gold-deep: var(--color-gold-deep);
+  --color-line: var(--color-line);
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Manrope", sans-serif;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+/* Base-layer element defaults, so Tailwind utility classes (e.g. text-white
+   on a specific h1) can still override them — unlayered CSS always beats
+   @layer utilities regardless of specificity, which silently broke every
+   text-white heading until this was moved in here. */
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+  }
+
+  ::selection {
+    background: var(--color-gold-light);
+    color: var(--color-ink);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--color-ink);
+  }
+}
