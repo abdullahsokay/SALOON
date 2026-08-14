@@ -31,7 +31,7 @@ export default function Testimonials() {
       type: "touch,pointer",
       dragMinimum: 20,
       onDragEnd: (self) => {
-        const dx = self.x - self.startX;
+        const dx = (self.x ?? 0) - (self.startX ?? 0);
         if (Math.abs(dx) < 20) return;
         go(dx < 0 ? 1 : -1);
       },
