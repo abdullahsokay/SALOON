@@ -5,6 +5,7 @@ import BookingForm from "@/components/home/BookingForm";
 import { InstagramIcon, FacebookIcon } from "@/components/ui/SocialIcons";
 import { locations } from "@/data/locations";
 import { site } from "@/data/site";
+import { serviceImage } from "@/data/images";
 
 export const metadata: Metadata = {
   title: "Contact & Booking — Jugnu's Salon & Studio",
@@ -18,6 +19,7 @@ export default function ContactPage() {
         eyebrow="Reserve Your Slot"
         title="Book Your Appointment"
         subtitle="Tell us what you're dreaming of and our team will confirm your slot. For bridal packages, mention your event date for priority booking."
+        image={serviceImage("interior", 2, 1800)}
       />
 
       <section className="px-6 py-20" id="booking">

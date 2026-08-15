@@ -5,6 +5,7 @@ import PageHero from "@/components/ui/PageHero";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import Button from "@/components/ui/Button";
 import { services } from "@/data/services";
+import { serviceImage } from "@/data/images";
 
 export function generateStaticParams() {
   return services.map((s) => ({ category: s.slug }));
@@ -35,11 +36,19 @@ export default async function ServiceCategoryPage({
 
   return (
     <>
-      <PageHero eyebrow={service.category} title={service.title} subtitle={service.summary} />
+      <PageHero
+        eyebrow={service.category}
+        title={service.title}
+        subtitle={service.summary}
+        image={serviceImage(service.slug, 0, 1800)}
+      />
       <section className="px-6 py-20">
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-12 md:grid-cols-2">
           <RevealOnScroll direction="left">
-            <div className="aspect-[4/5] rounded-2xl bg-gradient-to-br from-cream-2 to-gold-light shadow-[0_20px_50px_-25px_rgba(27,21,18,0.35)]" />
+            <div
+              className="aspect-[4/5] rounded-2xl bg-cover bg-center shadow-[0_20px_50px_-25px_rgba(27,21,18,0.35)]"
+              style={{ backgroundImage: `url(${serviceImage(service.slug, 1, 1000)})` }}
+            />
           </RevealOnScroll>
           <RevealOnScroll direction="right">
             <p className="text-ink-soft">{service.description}</p>

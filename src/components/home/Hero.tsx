@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "@/components/ui/Button";
+import { serviceImage } from "@/data/images";
 
 const words = ["Glow", "Confidence", "Bridal Look", "Best Self"];
 
@@ -18,9 +19,13 @@ export default function Hero() {
     <section className="relative flex min-h-[92vh] items-center justify-center overflow-hidden px-6 pt-24 pb-16 text-center">
       <div
         className="absolute inset-0 -z-10"
+        style={{ backgroundImage: `url(${serviceImage("bridal", 1, 1800)})`, backgroundSize: "cover", backgroundPosition: "center" }}
+      />
+      <div
+        className="absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(circle at 20% 20%, rgba(217,173,107,.35), transparent 45%), radial-gradient(circle at 80% 30%, rgba(184,134,63,.25), transparent 50%), radial-gradient(circle at 50% 90%, rgba(217,173,107,.2), transparent 55%), linear-gradient(160deg,#221a15,#3a2c22 55%,#1b1512)",
+            "radial-gradient(circle at 20% 20%, rgba(217,173,107,.25), transparent 45%), radial-gradient(circle at 80% 30%, rgba(184,134,63,.2), transparent 50%), linear-gradient(160deg,rgba(34,26,21,.88),rgba(58,44,34,.88) 55%,rgba(27,21,18,.93))",
         }}
       />
 

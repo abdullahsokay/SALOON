@@ -1,15 +1,7 @@
 import Link from "next/link";
 import styles from "./ScrollShowcase.module.css";
 import { services } from "@/data/services";
-
-const gradients = [
-  "linear-gradient(150deg,#e8c99a,#b8863f)",
-  "linear-gradient(150deg,#f2ebe1,#d9ad6b)",
-  "linear-gradient(150deg,#3a2c22,#8a611f)",
-  "linear-gradient(150deg,#d9ad6b,#4a3f39)",
-  "linear-gradient(150deg,#8a611f,#221a15)",
-  "linear-gradient(150deg,#f2ebe1,#b8863f)",
-];
+import { serviceImage } from "@/data/images";
 
 // CSS scroll-driven animation (animation-timeline/view-timeline) — Chrome/Edge
 // today, other browsers just render the panels statically without the
@@ -21,7 +13,10 @@ export default function ScrollShowcase() {
         {services.map((service, i) => (
           <article key={service.slug} className={styles.article} style={{ "--index": i } as React.CSSProperties}>
             <div className={styles.media}>
-              <div className={styles.mediaInner} style={{ background: gradients[i % gradients.length] }} />
+              <div
+                className={styles.mediaInner}
+                style={{ backgroundImage: `url(${serviceImage(service.slug, 2, 1400)})`, backgroundSize: "cover", backgroundPosition: "center" }}
+              />
             </div>
             <div className={styles.info}>
               <p className={styles.eyebrow}>{service.category}</p>

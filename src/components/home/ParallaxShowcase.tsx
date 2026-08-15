@@ -2,6 +2,7 @@ import styles from "./ParallaxShowcase.module.css";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import SplitHeading from "@/components/ui/SplitHeading";
 import { services } from "@/data/services";
+import { serviceImage } from "@/data/images";
 
 type LayerType = "fore" | "base" | "back" | "deep";
 
@@ -23,14 +24,6 @@ const groups: { slug: string; layers: LayerType[] }[] = [
   { slug: "waxing", layers: ["back", "base"] },
 ];
 
-// Placeholder photography from picsum.photos — swap for real studio/client
-// photos once available. Each layer gets a distinct image for depth variety.
-let imageCounter = 0;
-function nextPlaceholderImage() {
-  imageCounter += 1;
-  return `https://picsum.photos/1200/1400?random=${imageCounter}`;
-}
-
 export default function ParallaxShowcase() {
   return (
     <section>
@@ -49,11 +42,11 @@ export default function ParallaxShowcase() {
           const service = services.find((s) => s.slug === group.slug)!;
           return (
             <div key={group.slug} className={styles.group}>
-              {group.layers.map((layer) => (
+              {group.layers.map((layer, layerIndex) => (
                 <div
                   key={layer}
                   className={`${styles.layer} ${layerClass[layer]}`}
-                  style={{ backgroundImage: `url(${nextPlaceholderImage()})` }}
+                  style={{ backgroundImage: `url(${serviceImage(group.slug, layerIndex)})` }}
                 >
                   {layer === "base" && (
                     <div className={styles.title}>

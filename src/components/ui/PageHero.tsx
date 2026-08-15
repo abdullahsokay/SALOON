@@ -5,7 +5,17 @@ import { motion } from "framer-motion";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import SplitHeading from "./SplitHeading";
 
-export default function PageHero({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle?: string }) {
+export default function PageHero({
+  eyebrow,
+  title,
+  subtitle,
+  image,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  image?: string;
+}) {
   const bgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,8 +42,17 @@ export default function PageHero({ eyebrow, title, subtitle }: { eyebrow: string
         ref={bgRef}
         className="absolute inset-0 -z-10"
         style={{
-          background:
-            "radial-gradient(circle at 20% 20%, rgba(217,173,107,.3), transparent 45%), linear-gradient(160deg,#221a15,#3a2c22 55%,#1b1512)",
+          backgroundImage: image ? `url(${image})` : undefined,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background: image
+            ? "linear-gradient(160deg,rgba(34,26,21,.85),rgba(58,44,34,.85) 55%,rgba(27,21,18,.9))"
+            : "radial-gradient(circle at 20% 20%, rgba(217,173,107,.3), transparent 45%), linear-gradient(160deg,#221a15,#3a2c22 55%,#1b1512)",
         }}
       />
       <motion.p

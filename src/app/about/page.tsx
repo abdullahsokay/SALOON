@@ -4,6 +4,7 @@ import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import Leadership from "@/components/home/Leadership";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import TrustBar from "@/components/home/TrustBar";
+import { serviceImage } from "@/data/images";
 
 export const metadata: Metadata = {
   title: "About Us — Jugnu's Salon & Studio",
@@ -13,7 +14,11 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <PageHero eyebrow="About Us" title="Beauty, Redefined for the Modern You" />
+      <PageHero
+        eyebrow="About Us"
+        title="Beauty, Redefined for the Modern You"
+        image={serviceImage("interior", 1, 1800)}
+      />
 
       <section className="px-6 py-20">
         <RevealOnScroll direction="up" className="mx-auto max-w-2xl text-center">
