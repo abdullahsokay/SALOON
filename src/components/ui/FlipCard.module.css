@@ -8,6 +8,25 @@
   width: 100%;
   aspect-ratio: 31 / 46;
   perspective: 1200px;
+  position: relative;
+}
+
+/* Ambient glow halo behind the card, fades in on hover/focus */
+.container::before {
+  content: "";
+  position: absolute;
+  inset: -22px;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 50%, hsla(var(--hue), 85%, 62%, 0.55), transparent 70%);
+  filter: blur(28px);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.container:hover::before,
+.container:focus-within::before {
+  opacity: 1;
 }
 
 .flip {
@@ -34,6 +53,15 @@
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 10px 30px -18px hsla(var(--hue), 40%, 15%, 0.5);
+  transition: box-shadow 0.6s ease;
+}
+
+.container:hover .side,
+.container:focus-within .side {
+  box-shadow:
+    0 25px 60px -20px hsla(var(--hue), 60%, 30%, 0.55),
+    0 0 50px -12px hsla(var(--hue), 85%, 60%, 0.45);
 }
 
 .front {
@@ -61,6 +89,29 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.8s ease;
+}
+
+.container:hover .figure img,
+.container:focus-within .figure img {
+  transform: scale(1.08);
+}
+
+/* Diagonal light sweep across the image on hover */
+.figure::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(115deg, transparent 30%, hsla(0, 0%, 100%, 0.35) 48%, transparent 62%);
+  transform: translateX(-130%);
+  transition: transform 0.9s ease;
+  pointer-events: none;
+}
+
+.container:hover .figure::after,
+.container:focus-within .figure::after {
+  transform: translateX(130%);
 }
 
 .back .figure {
@@ -87,19 +138,24 @@
   position: absolute;
   top: 12px;
   right: 12px;
+  z-index: 3;
   padding: 6px 14px;
   font-weight: 700;
   font-size: 0.8rem;
   letter-spacing: 0.05em;
   color: var(--white-1);
-  background: hsla(var(--hue), 25%, 10%, 0.55);
+  background: hsla(var(--hue), 30%, 18%, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid hsla(var(--hue), 60%, 75%, 0.25);
   border-radius: 999px;
   text-decoration: none;
-  transition: background 0.2s;
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
 a.caption:hover {
-  background: hsla(var(--hue), 55%, 40%, 0.85);
+  background: hsla(var(--hue), 60%, 45%, 0.55);
+  box-shadow: 0 0 18px hsla(var(--hue), 80%, 60%, 0.45);
 }
 
 .details {
@@ -145,7 +201,9 @@ a.caption:hover {
   padding: 0.7rem 1.8rem;
   border: 1px solid var(--grey);
   border-radius: 999px;
-  background: transparent;
+  background: hsla(0, 0%, 100%, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: 0.3s;
   text-decoration: none;
 }
@@ -154,7 +212,8 @@ a.caption:hover {
 .bookBtn:focus {
   color: var(--primary);
   border-color: currentColor;
-  background: hsla(var(--hue), 25%, 10%, 0.3);
+  background: hsla(var(--hue), 35%, 20%, 0.4);
+  box-shadow: 0 0 26px hsla(var(--hue), 85%, 60%, 0.5);
 }
 
 .designContainer {
@@ -241,4 +300,10 @@ a.caption:hover {
 .bookBtn:focus + .designContainer {
   --tr: 20;
   --op: 0.7;
+}
+
+.bookBtn:hover + .designContainer .design,
+.bookBtn:focus + .designContainer .design {
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
 }
