@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Scissors, Sparkles, Gem, HandHelping, Wand2, ScissorsSquare } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
+import FlipCard from "@/components/ui/FlipCard";
 import { services } from "@/data/services";
 import { serviceImage } from "@/data/images";
 
@@ -11,13 +10,13 @@ export const metadata: Metadata = {
   description: "Hair, makeup, bridal, nails, facials and waxing services at Jugnu's Salon & Studio, F-7 Markaz Islamabad.",
 };
 
-const icons: Record<string, React.ElementType> = {
-  hair: Scissors,
-  makeup: Sparkles,
-  bridal: Gem,
-  nails: HandHelping,
-  facials: Wand2,
-  waxing: ScissorsSquare,
+const hues: Record<string, number> = {
+  hair: 35,
+  makeup: 42,
+  bridal: 28,
+  nails: 45,
+  facials: 38,
+  waxing: 32,
 };
 
 export default function ServicesPage() {
@@ -26,35 +25,24 @@ export default function ServicesPage() {
       <PageHero
         eyebrow="What We Offer"
         title="Signature Services"
-        subtitle="From everyday hair care to full bridal packages — every service is built around you."
+        subtitle="From everyday hair care to full bridal packages — every service is built around you. Hover (or tab to) a card to book."
         image={serviceImage("interior", 0, 1800)}
       />
       <section className="px-6 py-20">
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service, i) => {
-            const Icon = icons[service.slug] ?? Sparkles;
-            return (
-              <RevealOnScroll key={service.slug} direction="up" delay={(i % 3) * 0.08}>
-                <Link
-                  href={`/services/${service.slug}`}
-                  className="block h-full overflow-hidden rounded-2xl border border-line bg-white transition-transform duration-300 hover:-translate-y-1.5 hover:shadow-[0_20px_50px_-25px_rgba(27,21,18,0.35)]"
-                >
-                  <div
-                    className="h-40 bg-cover bg-center"
-                    style={{ backgroundImage: `url(${serviceImage(service.slug, 0, 700)})` }}
-                  />
-                  <div className="p-7">
-                    <div className="mb-4 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-br from-gold-light to-gold-deep p-3 text-white">
-                      <Icon size={26} />
-                    </div>
-                    <h2 className="text-xl">{service.title}</h2>
-                    <p className="mt-2 text-sm text-ink-soft">{service.summary}</p>
-                    <span className="mt-4 inline-block text-sm font-bold text-gold-deep">View details →</span>
-                  </div>
-                </Link>
-              </RevealOnScroll>
-            );
-          })}
+          {services.map((service, i) => (
+            <RevealOnScroll key={service.slug} direction="up" delay={(i % 3) * 0.08}>
+              <FlipCard
+                title={service.title}
+                caption={service.category}
+                image={serviceImage(service.slug, 0, 700)}
+                details={service.items}
+                hue={hues[service.slug]}
+                bookHref="/contact"
+                detailsHref={`/services/${service.slug}`}
+              />
+            </RevealOnScroll>
+          ))}
         </div>
       </section>
     </>
