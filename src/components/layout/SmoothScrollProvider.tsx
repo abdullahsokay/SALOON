@@ -8,7 +8,10 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
   useEffect(() => {
     if (prefersReducedMotion()) return;
 
-    const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+    // allowNestedScroll lets Lenis detect nested overflow:auto boxes (like
+    // the parallax showcase panel) and hand wheel input to them natively
+    // instead of always driving the outer page scroll.
+    const lenis = new Lenis({ duration: 1.15, smoothWheel: true, allowNestedScroll: true });
     lenis.on("scroll", ScrollTrigger.update);
 
     function raf(time: number) {

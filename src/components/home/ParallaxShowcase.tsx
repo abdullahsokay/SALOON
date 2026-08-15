@@ -44,7 +44,7 @@ export default function ParallaxShowcase() {
         </RevealOnScroll>
       </div>
       <p className={styles.hint}>Scroll inside this panel to explore →</p>
-      <div className={styles.parallax}>
+      <div className={styles.parallax} data-lenis-prevent>
         {groups.map((group) => {
           const service = services.find((s) => s.slug === group.slug)!;
           return (
