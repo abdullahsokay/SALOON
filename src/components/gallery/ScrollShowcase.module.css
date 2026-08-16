@@ -1,6 +1,11 @@
 .showcase {
   --info-size: 38vh;
   width: 100%;
+  /* Establishes a containing block for the position:fixed .media panels
+     below, so they're pinned within this section instead of escaping to
+     the actual browser viewport and bleeding over the Hero above and the
+     Footer below (which is exactly what was happening without this). */
+  transform: translateZ(0);
 }
 
 .article {
