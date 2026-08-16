@@ -55,3 +55,36 @@ html {
     color: var(--color-ink);
   }
 }
+
+/* Attention-pulse ring for the one always-visible primary CTA (nav "Book
+   Appointment") — a radiating box-shadow ring, Hover.css/Animate.css style,
+   without pulling in a whole library for one effect. Layered alongside the
+   button's own static shadow (not replacing it, since CSS animations
+   override the static box-shadow value entirely for their duration).
+   Pauses on hover/focus so it doesn't fight the button's own hover state. */
+@keyframes cta-pulse-ring {
+  0% {
+    box-shadow: 0 12px 24px -10px rgba(138, 97, 31, 0.55), 0 0 0 0 hsla(38, 60%, 58%, 0.55);
+  }
+  70% {
+    box-shadow: 0 12px 24px -10px rgba(138, 97, 31, 0.55), 0 0 0 14px hsla(38, 60%, 58%, 0);
+  }
+  100% {
+    box-shadow: 0 12px 24px -10px rgba(138, 97, 31, 0.55), 0 0 0 0 hsla(38, 60%, 58%, 0);
+  }
+}
+
+.cta-pulse {
+  animation: cta-pulse-ring 2.6s ease-out infinite;
+}
+
+.cta-pulse:hover,
+.cta-pulse:focus-visible {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-pulse {
+    animation: none;
+  }
+}

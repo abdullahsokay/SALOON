@@ -1,11 +1,6 @@
 .showcase {
   --info-size: 38vh;
   width: 100%;
-  /* Establishes a containing block for the position:fixed .media panels
-     below, so they're pinned within this section instead of escaping to
-     the actual browser viewport and bleeding over the Hero above and the
-     Footer below (which is exactly what was happening without this). */
-  transform: translateZ(0);
 }
 
 .article {
@@ -107,6 +102,13 @@
     z-index: calc(10 - var(--index, 0));
     position: relative;
     grid-template-rows: unset;
+    /* Containing block for this article's own .media (position:fixed)
+       child, scoped to just this one 100vh article — not the whole
+       multi-article showcase (that broke re-pinning per article: the
+       image only rendered for the first panel and went blank for every
+       one after it) and not the true viewport (that bled the image over
+       the Hero above and Footer below the whole showcase). */
+    transform: translateZ(0);
   }
 
   .info {
