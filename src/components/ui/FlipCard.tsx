@@ -1,9 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import styles from "./FlipCard.module.css";
+import clsx from "clsx";
 
 // 3D flip-card: hover or tab-focus flips it to reveal a Book button.
-// Adapted from a CSS flip-card technique — details list, image treatment
-// and colors rebuilt around our service data and brand palette.
+// Tapping the card does the same via `active` state, since :hover and
+// :focus-within alone never trigger on touch devices — without this,
+// mobile users could never reach the Book button on the back face.
 export default function FlipCard({
   title,
   caption,
@@ -21,8 +26,19 @@ export default function FlipCard({
   bookHref?: string;
   detailsHref?: string;
 }) {
+  const [active, setActive] = useState(false);
+
+  function handleClick(e: React.MouseEvent<HTMLDivElement>) {
+    if ((e.target as HTMLElement).closest("a")) return; // let links navigate normally
+    setActive((a) => !a);
+  }
+
   return (
-    <div className={styles.container} style={{ "--hue": hue } as React.CSSProperties}>
+    <div
+      className={clsx(styles.container, active && styles.active)}
+      style={{ "--hue": hue } as React.CSSProperties}
+      onClick={handleClick}
+    >
       <div className={styles.flip}>
         <div className={`${styles.side} ${styles.front}`}>
           <figure className={styles.figure}>

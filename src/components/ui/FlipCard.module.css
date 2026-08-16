@@ -1,3 +1,11 @@
+/* Standalone rule so CSS Modules exports this as its own token — it's only
+   ever combined as `.container.active` below, but a class that never
+   appears as its own selector doesn't get exported, which silently broke
+   the JS-driven tap-to-flip toggle (styles.active was undefined). */
+.active {
+  --tap-active: 1;
+}
+
 .container {
   --primary: hsl(var(--hue), 55%, 55%);
   --dark: hsl(var(--hue), 25%, 12%);
@@ -9,6 +17,7 @@
   aspect-ratio: 31 / 46;
   perspective: 1200px;
   position: relative;
+  cursor: pointer;
 }
 
 /* Ambient glow halo behind the card, fades in on hover/focus */
@@ -25,7 +34,8 @@
 }
 
 .container:hover::before,
-.container:focus-within::before {
+.container:focus-within::before,
+.container.active::before {
   opacity: 1;
 }
 
@@ -38,7 +48,8 @@
 }
 
 .container:hover .flip,
-.container:focus-within .flip {
+.container:focus-within .flip,
+.container.active .flip {
   transform: rotateY(180deg);
 }
 
@@ -58,7 +69,8 @@
 }
 
 .container:hover .side,
-.container:focus-within .side {
+.container:focus-within .side,
+.container.active .side {
   box-shadow:
     0 25px 60px -20px hsla(var(--hue), 60%, 30%, 0.55),
     0 0 50px -12px hsla(var(--hue), 85%, 60%, 0.45);
@@ -93,7 +105,8 @@
 }
 
 .container:hover .figure img,
-.container:focus-within .figure img {
+.container:focus-within .figure img,
+.container.active .figure img {
   transform: scale(1.08);
 }
 
@@ -110,7 +123,8 @@
 }
 
 .container:hover .figure::after,
-.container:focus-within .figure::after {
+.container:focus-within .figure::after,
+.container.active .figure::after {
   transform: translateX(130%);
 }
 
