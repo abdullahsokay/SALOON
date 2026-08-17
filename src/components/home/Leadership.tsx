@@ -1,3 +1,4 @@
+import { Users } from "lucide-react";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import { leadership, leadershipConfirmed } from "@/data/leadership";
 
@@ -9,7 +10,10 @@ export default function Leadership() {
       <section className="px-6 py-24">
         <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-12 md:grid-cols-2">
           <RevealOnScroll direction="left">
-            <div className="aspect-[4/5] rounded-2xl bg-gradient-to-br from-cream-2 to-gold-light shadow-[0_20px_50px_-25px_rgba(27,21,18,0.35)]" />
+            <div className="flex aspect-[4/5] flex-col items-center justify-center gap-3 rounded-2xl bg-gradient-to-br from-cream-2 to-gold-light shadow-[0_20px_50px_-25px_rgba(27,21,18,0.35)]">
+              <Users size={40} className="text-white/70" strokeWidth={1.5} />
+              <span className="text-xs font-bold tracking-[0.18em] text-white/70 uppercase">Photo Coming Soon</span>
+            </div>
           </RevealOnScroll>
           <RevealOnScroll direction="right">
             <p className="mb-2 text-xs font-bold tracking-[0.18em] text-gold-deep uppercase">Meet the Team</p>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { MapPinned } from "lucide-react";
 import PageHero from "@/components/ui/PageHero";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import BookingForm from "@/components/home/BookingForm";
@@ -69,7 +70,8 @@ export default function ContactPage() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
               ) : (
-                <div className="flex h-[220px] items-center justify-center bg-cream-2 text-sm text-ink-soft">
+                <div className="flex h-[220px] flex-col items-center justify-center gap-2 bg-cream-2 text-sm text-ink-soft">
+                  <MapPinned size={24} className="text-gold-deep/60" strokeWidth={1.5} />
                   Map coming soon
                 </div>
               )}

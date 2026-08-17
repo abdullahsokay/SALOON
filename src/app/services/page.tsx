@@ -25,7 +25,7 @@ export default function ServicesPage() {
       <PageHero
         eyebrow="What We Offer"
         title="Signature Services"
-        subtitle="From everyday hair care to full bridal packages — every service is built around you. Hover (or tab to) a card to book."
+        subtitle="From everyday hair care to full bridal packages — every service is built around you. Hover, tap, or tab a card to book."
         image={serviceImage("interior", 0, 1800)}
       />
       <section className="px-6 py-20">
