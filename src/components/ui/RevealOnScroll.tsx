@@ -12,14 +12,12 @@ export default function RevealOnScroll({
   distance = 50,
   delay = 0,
   className,
-  as: Tag = "div",
 }: {
   children: React.ReactNode;
   direction?: Direction;
   distance?: number;
   delay?: number;
   className?: string;
-  as?: React.ElementType;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -52,10 +50,9 @@ export default function RevealOnScroll({
     return () => ctx.revert();
   }, [direction, distance, delay]);
 
-  const Comp = Tag as React.ElementType;
   return (
-    <Comp ref={ref} className={clsx(className)}>
+    <div ref={ref} className={clsx(className)}>
       {children}
-    </Comp>
+    </div>
   );
 }

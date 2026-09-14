@@ -10,15 +10,6 @@ export const metadata: Metadata = {
   description: "Hair, makeup, bridal, nails, facials and waxing services at Jugnu's Salon & Studio, F-7 Markaz Islamabad.",
 };
 
-const hues: Record<string, number> = {
-  hair: 35,
-  makeup: 42,
-  bridal: 28,
-  nails: 45,
-  facials: 38,
-  waxing: 32,
-};
-
 export default function ServicesPage() {
   return (
     <>
@@ -37,8 +28,8 @@ export default function ServicesPage() {
                 caption={service.category}
                 image={serviceImage(service.slug, 0, 700)}
                 details={service.items}
-                hue={hues[service.slug]}
-                bookHref="/contact"
+                hue={service.hue}
+                bookHref="/book"
                 detailsHref={`/services/${service.slug}`}
               />
             </RevealOnScroll>

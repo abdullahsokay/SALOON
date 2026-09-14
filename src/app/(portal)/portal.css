@@ -1,0 +1,115 @@
+/* Customer booking portal — scoped to .portal-root so it can never bleed
+   into the marketing site's gold theme or the Suite's pink theme, same
+   pattern as dashboard/suite.css. Ported from Jugnu Studio - Customer.dc.html. */
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap");
+
+.portal-root {
+  --portal-accent: #ec3013;
+  --portal-ink: #201e1d;
+  --portal-paper: #f3f2f2;
+  --portal-line: rgba(32, 30, 29, 0.22);
+  --portal-mute: #605d5d;
+
+  min-height: 100vh;
+  background: var(--portal-paper);
+  color: var(--portal-ink);
+  font-family: "Archivo", system-ui, sans-serif;
+}
+
+.portal-root * {
+  box-sizing: border-box;
+}
+
+.portal-root a {
+  color: var(--portal-accent);
+  text-decoration: none;
+}
+.portal-root a:hover {
+  color: var(--portal-ink);
+  text-decoration: underline;
+}
+
+.portal-root button,
+.portal-root input,
+.portal-root select,
+.portal-root textarea {
+  font-family: inherit;
+}
+
+.portal-root ::selection {
+  background: var(--portal-accent);
+  color: var(--portal-paper);
+}
+
+.portal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 2px solid transparent;
+  padding: 16px 28px;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease, background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.portal-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.portal-btn-primary {
+  background: var(--portal-accent);
+  color: var(--portal-paper);
+}
+.portal-btn-primary:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+.portal-btn-primary:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.portal-btn-dark {
+  background: var(--portal-ink);
+  color: var(--portal-paper);
+}
+.portal-btn-dark:hover:not(:disabled) {
+  background: var(--portal-accent);
+}
+.portal-btn-outline {
+  background: none;
+  color: var(--portal-ink);
+  border-color: var(--portal-ink);
+}
+.portal-btn-outline:hover:not(:disabled) {
+  background: var(--portal-ink);
+  color: var(--portal-paper);
+}
+
+.portal-input {
+  width: 100%;
+  background: var(--portal-paper);
+  border: 2px solid var(--portal-ink);
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--portal-ink);
+}
+.portal-input::placeholder {
+  color: var(--portal-mute);
+  font-weight: 600;
+}
+
+@keyframes portalRise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes portalPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portal-root *, .portal-root *::before, .portal-root *::after {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+}

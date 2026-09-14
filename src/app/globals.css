@@ -1,22 +1,27 @@
 @import "tailwindcss";
 
+/* Jugnu's Salon & Studio — gold-on-dark luxury palette, sourced from the
+   Site.dc.html design spec. Do not reintroduce the Suite's pink accent here
+   — that theme is scoped to .suite-root in dashboard/suite.css so it can
+   never bleed into the public marketing site. */
 :root {
-  --background: #faf6f0;
-  --foreground: #1b1512;
+  --background: #faf7f2;
+  --foreground: #14110f;
 
-  --color-ink: #1b1512;
-  --color-ink-soft: #4a3f39;
-  --color-cream: #faf6f0;
-  --color-cream-2: #f2ebe1;
-  --color-gold: #b8863f;
-  --color-gold-light: #d9ad6b;
-  --color-gold-deep: #8a611f;
-  --color-line: #e6dcca;
+  --color-ink: #14110f;
+  --color-ink-soft: #4a413a;
+  --color-cream: #faf7f2;
+  --color-cream-2: #efe8dd;
+  --color-gold: #c9a45c;
+  --color-gold-light: #d9bc85;
+  --color-gold-deep: #b48a4a;
+  --color-line: rgba(20, 17, 15, 0.14);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --color-ink: var(--color-ink);
   --color-ink-soft: var(--color-ink-soft);
   --color-cream: var(--color-cream);
@@ -33,44 +38,22 @@ html {
   scroll-behavior: auto;
 }
 
-/* Base-layer element defaults, so Tailwind utility classes (e.g. text-white
-   on a specific h1) can still override them — unlayered CSS always beats
-   @layer utilities regardless of specificity, which silently broke every
-   text-white heading until this was moved in here. */
 @layer base {
   body {
-    background: var(--background);
-    color: var(--foreground);
+    background: #faf7f2;
+    color: #14110f;
   }
 
   ::selection {
-    background: var(--color-gold-light);
-    color: var(--color-ink);
+    background: #c9a45c;
+    color: #14110f;
   }
 
   h1, h2, h3, h4 {
     font-family: var(--font-serif);
     font-weight: 600;
-    line-height: 1.15;
-    color: var(--color-ink);
-  }
-}
-
-/* Attention-pulse ring for the one always-visible primary CTA (nav "Book
-   Appointment") — a radiating box-shadow ring, Hover.css/Animate.css style,
-   without pulling in a whole library for one effect. Layered alongside the
-   button's own static shadow (not replacing it, since CSS animations
-   override the static box-shadow value entirely for their duration).
-   Pauses on hover/focus so it doesn't fight the button's own hover state. */
-@keyframes cta-pulse-ring {
-  0% {
-    box-shadow: 0 12px 24px -10px rgba(138, 97, 31, 0.55), 0 0 0 0 hsla(38, 60%, 58%, 0.55);
-  }
-  70% {
-    box-shadow: 0 12px 24px -10px rgba(138, 97, 31, 0.55), 0 0 0 14px hsla(38, 60%, 58%, 0);
-  }
-  100% {
-    box-shadow: 0 12px 24px -10px rgba(138, 97, 31, 0.55), 0 0 0 0 hsla(38, 60%, 58%, 0);
+    line-height: 1.2;
+    color: #14110f;
   }
 }
 
@@ -78,13 +61,33 @@ html {
   animation: cta-pulse-ring 2.6s ease-out infinite;
 }
 
-.cta-pulse:hover,
-.cta-pulse:focus-visible {
-  animation-play-state: paused;
+@keyframes cta-pulse-ring {
+  0% {
+    box-shadow: 0 8px 20px -6px rgba(180, 138, 74, 0.5), 0 0 0 0 rgba(201, 164, 92, 0.4);
+  }
+  70% {
+    box-shadow: 0 8px 20px -6px rgba(180, 138, 74, 0.5), 0 0 0 12px rgba(201, 164, 92, 0);
+  }
+  100% {
+    box-shadow: 0 8px 20px -6px rgba(180, 138, 74, 0.5), 0 0 0 0 rgba(201, 164, 92, 0);
+  }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cta-pulse {
-    animation: none;
-  }
+/* Hero: Ken Burns background drift + scroll cue, matching Site.dc.html */
+@keyframes jgKen {
+  0% { transform: scale(1.06) translate(0, 0); }
+  100% { transform: scale(1.16) translate(-1.5%, -1.5%); }
+}
+@keyframes jgScrollCue {
+  0% { transform: translateY(0); opacity: 1; }
+  70% { transform: translateY(13px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+@keyframes jgFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes jgRing {
+  0% { transform: scale(1); opacity: .5; }
+  100% { transform: scale(1.9); opacity: 0; }
 }

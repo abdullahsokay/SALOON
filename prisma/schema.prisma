@@ -1,0 +1,179 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CUSTOMER
+  STAFF
+}
+
+// Suite "Team & access" tab only — governs what a STAFF account can do
+// inside the Suite. Meaningless for CUSTOMER accounts.
+enum AccessLevel {
+  PENDING
+  LIMITED
+  FULL
+}
+
+model User {
+  id            String         @id @default(cuid())
+  name          String
+  email         String         @unique
+  phone         String?
+  passwordHash  String
+  role          Role           @default(CUSTOMER)
+  accessLevel   AccessLevel    @default(FULL)
+  // Loyalty — customer portal only; staff accounts never accrue these.
+  points        Int            @default(0)
+  referralCode  String?        @unique
+  createdAt     DateTime       @default(now())
+  bookings      Booking[]
+  notifications Notification[]
+  packages      UserPackage[]
+}
+
+enum BookingStatus {
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
+enum BookingSource {
+  WEBSITE
+  SUITE
+}
+
+// A WEBSITE booking sits at PENDING until a staff member accepts/declines it
+// in the Suite's "online requests" panel — accepting doesn't change
+// `status` (still CONFIRMED, same as a Suite-made booking), it only clears
+// the review gate. SUITE bookings skip review entirely (a staff member typed
+// it in directly, there's nothing to triage).
+enum ReviewStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  customer      User          @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId    String
+  serviceSlug   String
+  serviceName   String
+  category      String
+  stylist       Stylist?      @relation(fields: [stylistId], references: [id], onDelete: SetNull)
+  stylistId     String?
+  stylistName   String?
+  branch        String
+  date          String
+  time          String
+  notes         String?
+  // Null until staff quote it — the public site lists broad categories, not
+  // fixed prices, so the exact amount is always confirmed by staff, same as
+  // a walk-in booking. Customer-portal bookings (which pick a priced,
+  // catalog Service) set this directly instead.
+  price         Int?
+  depositAmount Int?
+  paymentMethod String?
+  pointsAwarded Int           @default(0)
+  source        BookingSource @default(SUITE)
+  reviewStatus  ReviewStatus  @default(ACCEPTED)
+  status        BookingStatus @default(CONFIRMED)
+  paymentStatus PaymentStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  notifications Notification[]
+
+  @@index([customerId])
+  @@index([source, reviewStatus])
+}
+
+// Bookable, priced treatment catalog — the one source of truth the Suite's
+// "Website control" tab edits (price / visibility) and both the marketing
+// site and the customer portal read from. Distinct from data/services.ts,
+// which holds long-form marketing copy (summary/description/items) for the
+// informational /services pages — that's editorial content, not a priced
+// line item, so it stays a static file rather than a DB row.
+model Service {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  category         String
+  name             String
+  durationMinutes  Int
+  price            Int
+  visibleOnWebsite Boolean  @default(true)
+  bookingsCount    Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+// Shared between the Suite's roster tab (duty status) and the customer
+// portal's stylist picker — one live table instead of the two mockups'
+// separate, drifting fake stylist lists.
+model Stylist {
+  id        String    @id @default(cuid())
+  name      String
+  specialty String
+  branch    String
+  status    String    @default("Available")
+  rating    Float     @default(4.8)
+  createdAt DateTime  @default(now())
+  bookings  Booking[]
+}
+
+// Ownership only — the package catalog itself (title/price/bullets/etc.) is
+// static marketing content in data/packages.ts, same reasoning as Service
+// vs. data/services.ts above. `packageSlug` references that static catalog.
+model UserPackage {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  packageSlug String
+  status      String   @default("Active")
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, packageSlug])
+}
+
+// Suite "Inventory" tab — supplies stock, not treatment/service stock.
+model InventoryItem {
+  id        String   @id @default(cuid())
+  name      String
+  category  String
+  stock     Int
+  unit      String
+  minAlert  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum NotifChannel {
+  IN_APP
+  WHATSAPP
+  EMAIL
+}
+
+model Notification {
+  id        String       @id @default(cuid())
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  booking   Booking?     @relation(fields: [bookingId], references: [id], onDelete: SetNull)
+  bookingId String?
+  channel   NotifChannel
+  title     String
+  body      String
+  read      Boolean      @default(false)
+  createdAt DateTime     @default(now())
+
+  @@index([userId])
+}

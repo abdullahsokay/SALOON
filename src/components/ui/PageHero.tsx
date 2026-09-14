@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import SplitHeading from "./SplitHeading";
@@ -16,7 +17,7 @@ export default function PageHero({
   subtitle?: string;
   image?: string;
 }) {
-  const bgRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const el = bgRef.current;
@@ -38,21 +39,15 @@ export default function PageHero({
 
   return (
     <section className="relative overflow-hidden px-6 py-24 text-center text-white">
-      <div
-        ref={bgRef}
-        className="absolute inset-0 -z-10"
-        style={{
-          backgroundImage: image ? `url(${image})` : undefined,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
+      {image && (
+        <Image ref={bgRef} src={image} alt="" fill priority sizes="100vw" className="-z-10 object-cover" />
+      )}
       <div
         className="absolute inset-0 -z-10"
         style={{
           background: image
             ? "linear-gradient(160deg,rgba(34,26,21,.85),rgba(58,44,34,.85) 55%,rgba(27,21,18,.9))"
-            : "radial-gradient(circle at 20% 20%, rgba(217,173,107,.3), transparent 45%), linear-gradient(160deg,#221a15,#3a2c22 55%,#1b1512)",
+            : "radial-gradient(circle at 20% 20%, rgba(245,153,201,.3), transparent 45%), linear-gradient(160deg,#221a15,#3a2c22 55%,#1b1512)",
         }}
       />
       <motion.p

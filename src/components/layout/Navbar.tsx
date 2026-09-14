@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/about", label: "About" },
   { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Visit Us" },
+  { href: "/account/login", label: "My Account" },
 ];
 
 export default function Navbar() {
@@ -61,7 +62,7 @@ export default function Navbar() {
             <Button href={`tel:${site.phonePrimaryHref}`} variant="ghost">
               Call Now
             </Button>
-            <Button href="/contact">Book Appointment</Button>
+            <Button href="/book">Book Appointment</Button>
           </div>
 
           <button
@@ -93,7 +94,7 @@ export default function Navbar() {
                     {link.label}
                   </Link>
                 ))}
-                <Button href="/contact" className="mt-2 w-full" onClick={() => setOpen(false)}>
+                <Button href="/book" className="mt-2 w-full" onClick={() => setOpen(false)}>
                   Book Appointment
                 </Button>
               </div>

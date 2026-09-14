@@ -31,9 +31,11 @@ export default function LocationsHours() {
             <a href={site.instagramUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-bold text-white">
               <InstagramIcon size={16} /> Instagram
             </a>
-            <a href={site.facebookUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-bold text-white">
-              <FacebookIcon size={16} /> Facebook
-            </a>
+            {site.facebookUrl && (
+              <a href={site.facebookUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-bold text-white">
+                <FacebookIcon size={16} /> Facebook
+              </a>
+            )}
           </div>
 
           <p className="mt-6 border-t border-line pt-5 text-sm text-ink-soft">

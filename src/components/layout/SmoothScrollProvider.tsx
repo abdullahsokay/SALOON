@@ -14,11 +14,12 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     const lenis = new Lenis({ duration: 1.15, smoothWheel: true, allowNestedScroll: true });
     lenis.on("scroll", ScrollTrigger.update);
 
+    let frameId: number;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      frameId = requestAnimationFrame(raf);
     }
-    const id = requestAnimationFrame(raf);
+    frameId = requestAnimationFrame(raf);
 
     // Smooth-scroll to in-page anchors (the ScrollToPlugin use case) via
     // Lenis's own scrollTo instead of a second GSAP scroll animator, so only
@@ -43,7 +44,7 @@ export default function SmoothScrollProvider({ children }: { children: React.Rea
     }
 
     return () => {
-      cancelAnimationFrame(id);
+      cancelAnimationFrame(frameId);
       document.removeEventListener("click", onClick);
       lenis.destroy();
     };

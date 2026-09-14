@@ -21,6 +21,7 @@ export default function Footer() {
             <Link href="/about">About</Link>
             <Link href="/gallery">Gallery</Link>
             <Link href="/contact">Visit Us</Link>
+            <Link href="/dashboard/login" className="text-gold-light font-bold">Management Portal</Link>
           </div>
         </div>
         <div>
@@ -36,9 +37,11 @@ export default function Footer() {
             <a href={site.instagramUrl} target="_blank" rel="noopener noreferrer">
               Instagram
             </a>
-            <a href={site.facebookUrl} target="_blank" rel="noopener noreferrer">
-              Facebook
-            </a>
+            {site.facebookUrl && (
+              <a href={site.facebookUrl} target="_blank" rel="noopener noreferrer">
+                Facebook
+              </a>
+            )}
           </div>
         </div>
       </div>

@@ -37,7 +37,7 @@ export default function GallerySwiper() {
         className={styles.swiper}
       >
         {services.map((service) => {
-          const c = copy[service.slug];
+          const c = copy[service.slug] ?? { emphasis: service.category, rest: service.title, caption: service.title };
           return (
             <SwiperSlide key={service.slug} className={styles.slide}>
               <div className={styles.panel} data-swiper-parallax-y="-20%">

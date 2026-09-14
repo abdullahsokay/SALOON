@@ -13,7 +13,7 @@ export default function SplitHeading({
   className,
 }: {
   as?: "h1" | "h2" | "h3";
-  children: string;
+  children: React.ReactNode;
   className?: string;
 }) {
   const ref = useRef<HTMLHeadingElement>(null);

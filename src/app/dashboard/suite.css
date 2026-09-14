@@ -1,0 +1,584 @@
+/* Salon Suite — staff/manager portal design system.
+   Ported from the "Jugnu Salon Suite" design component (dc.html) to plain CSS + React. */
+
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap");
+
+.suite-root {
+  --suite-accent: #c94b8e;
+  --suite-accent-100: #fdf2f7;
+  --suite-accent-200: #f7e7ef;
+  --suite-accent-300: #f5cbe1;
+  --suite-accent-600: #ac3a71;
+  --suite-accent-700: #8a2e5e;
+  --suite-accent-800: #5e1f40;
+  --suite-bg: #f9f4f6;
+  --suite-text: #4d1b32;
+  --suite-divider: color-mix(in srgb, #4d1b32 34%, transparent);
+  --suite-neutral-100: #fbf6f8;
+  --suite-neutral-200: #f2e8ed;
+  --suite-neutral-300: #e4d2dc;
+  --suite-neutral-400: #c9adba;
+  --suite-neutral-500: #a9808f;
+  --suite-neutral-600: #8f6678;
+  --suite-neutral-700: #7a4d65;
+  --suite-neutral-800: #5c3549;
+  --suite-neutral-900: #3d1526;
+  --suite-shadow-sm: 0 1px 2px color-mix(in srgb, #4d1b32 16%, transparent);
+  --suite-shadow-md: 0 3px 10px color-mix(in srgb, #4d1b32 18%, transparent);
+  --suite-shadow-lg: 0 12px 32px color-mix(in srgb, #4d1b32 24%, transparent);
+  --suite-pad: 24px;
+  --suite-gap: 20px;
+
+  min-height: 100vh;
+  background: var(--suite-bg);
+  color: var(--suite-text);
+  font-family: "Archivo", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.suite-root * {
+  box-sizing: border-box;
+}
+
+.suite-root a {
+  color: var(--suite-accent);
+  text-decoration: none;
+}
+.suite-root a:hover {
+  color: var(--suite-accent-700);
+  text-decoration: underline;
+}
+
+.suite-root button {
+  font: inherit;
+}
+.suite-root input,
+.suite-root select {
+  font: inherit;
+}
+
+.suite-root ::selection {
+  background: var(--suite-accent-300);
+}
+
+/* Replace the browser/OS default focus ring (which inherits the system
+   accent color — can render as an unrelated brownish/maroon flash on some
+   Windows themes) with our own pink outline, and drop the mobile tap-
+   highlight flash entirely. */
+.suite-root button,
+.suite-root input,
+.suite-root select,
+.suite-root a {
+  -webkit-tap-highlight-color: transparent;
+}
+.suite-root button:focus,
+.suite-root input:focus,
+.suite-root select:focus,
+.suite-root a:focus {
+  outline: none;
+}
+.suite-root button:focus-visible,
+.suite-root input:focus-visible,
+.suite-root select:focus-visible,
+.suite-root a:focus-visible {
+  outline: 2px solid var(--suite-accent);
+  outline-offset: 2px;
+}
+
+@keyframes suiteRise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes suiteRuleIn {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes suiteDrift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 64px 0, 0 64px; }
+}
+@keyframes suiteWordIn {
+  from { transform: translateY(115%); }
+  to { transform: translateY(0); }
+}
+@keyframes suiteMarquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes suiteSweep {
+  0% { transform: translateX(-60%); }
+  55%, 100% { transform: translateX(60%); }
+}
+@keyframes suiteBarGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@property --suite-glow-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes suiteGlowSpin {
+  to { --suite-glow-angle: 360deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .suite-root *,
+  .suite-root *::before,
+  .suite-root *::after {
+    animation-duration: .001s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001s !important;
+  }
+}
+
+.suite-rise { animation: suiteRise .6s both cubic-bezier(.2,.75,.2,1); }
+.suite-rule { height: 2px; background: var(--suite-text); transform-origin: left; animation: suiteRuleIn .8s .15s both cubic-bezier(.2,.75,.2,1); }
+
+/* Rotating glow halo: a blurred conic-gradient ring that circulates around
+   an element's border on hover/focus. Applied directly to buttons (which
+   support ::before); inputs/selects can't reliably render pseudo-elements,
+   so those get wrapped in a .suite-field div that carries the effect
+   instead. */
+.suite-btn,
+.suite-field,
+.suite-auth-tabs {
+  position: relative;
+}
+.suite-btn::before,
+.suite-field::before,
+.suite-auth-tabs::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  border-radius: inherit;
+  background: conic-gradient(from var(--suite-glow-angle), transparent 0deg, var(--suite-accent) 35deg, transparent 90deg, var(--suite-accent-300) 210deg, transparent 260deg);
+  filter: blur(4px);
+  opacity: 0;
+  animation: suiteGlowSpin 2.6s linear infinite;
+  animation-play-state: paused;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+.suite-btn:hover::before,
+.suite-btn:focus-visible::before,
+.suite-field:focus-within::before,
+.suite-auth-tabs:hover::before,
+.suite-auth-tabs:focus-within::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+@media (prefers-reduced-motion: reduce) {
+  .suite-btn::before,
+  .suite-field::before,
+  .suite-auth-tabs::before {
+    animation: none;
+  }
+}
+
+/* ---------- primitives ---------- */
+
+.suite-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--suite-text);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 13px;
+  background: #fff;
+  color: var(--suite-text);
+  transition: transform .18s cubic-bezier(.2,.75,.2,1), box-shadow .18s, background .15s, color .15s;
+}
+.suite-btn:hover { background: var(--suite-neutral-100); }
+.suite-btn-primary {
+  background: var(--suite-accent);
+  border-color: var(--suite-accent);
+  color: #fff;
+}
+.suite-btn-primary:hover {
+  background: var(--suite-accent-700);
+  border-color: var(--suite-accent-700);
+  transform: translateY(-1px);
+  box-shadow: var(--suite-shadow-md);
+}
+.suite-btn-secondary {
+  background: #fff;
+  border-color: var(--suite-neutral-400);
+  color: var(--suite-neutral-800);
+}
+.suite-btn-secondary:hover { background: var(--suite-neutral-100); }
+.suite-btn-icon { width: 40px; padding: 0; }
+.suite-btn:disabled { opacity: .5; cursor: default; }
+
+.suite-input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  background: #fff;
+  border: 1px solid var(--suite-neutral-400);
+  color: var(--suite-text);
+  transition: border-color .2s, box-shadow .2s;
+}
+.suite-input:focus {
+  outline: none;
+  border-color: var(--suite-accent);
+  box-shadow: 0 0 0 3px var(--suite-accent-200);
+}
+.suite-input::placeholder { color: var(--suite-neutral-500); }
+
+.suite-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--suite-neutral-700);
+  margin-bottom: 6px;
+}
+
+.suite-card {
+  background: #fff;
+  border: 1px solid var(--suite-neutral-300);
+}
+.suite-card-head {
+  padding: 14px 18px;
+  border-bottom: 2px solid var(--suite-text);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.suite-card-eyebrow {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  color: var(--suite-neutral-700);
+}
+.suite-card-title {
+  margin: 3px 0 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.suite-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  padding: 5px 9px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.suite-table-wrap { padding: 0 18px 8px; overflow-x: auto; }
+.suite-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.suite-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--suite-neutral-600);
+  padding: 10px 10px;
+  border-bottom: 2px solid var(--suite-text);
+  white-space: nowrap;
+}
+.suite-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--suite-neutral-300);
+  vertical-align: middle;
+}
+.suite-table tr:last-child td { border-bottom: none; }
+
+.suite-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 60;
+  background: var(--suite-text);
+  color: #fff;
+  padding: 13px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: var(--suite-shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.suite-toast::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--suite-accent);
+  flex: none;
+}
+
+.suite-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  background: color-mix(in srgb, var(--suite-text) 55%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.suite-dialog {
+  background: #fff;
+  border: 2px solid var(--suite-text);
+  width: min(520px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* ---------- auth screen ---------- */
+
+.suite-auth {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+@media (max-width: 900px) {
+  .suite-auth { grid-template-columns: 1fr; }
+  .suite-auth-visual { display: none; }
+}
+
+.suite-auth-form-side {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 56px 64px;
+  border-right: 2px solid var(--suite-text);
+}
+@media (max-width: 640px) {
+  .suite-auth-form-side { padding: 40px 24px; border-right: none; }
+}
+
+.suite-auth-tabs {
+  position: relative;
+  display: flex;
+  border: 1px solid var(--suite-divider);
+  overflow: hidden;
+}
+.suite-auth-tab-thumb {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 50%;
+  background: var(--suite-accent);
+  transition: transform .4s cubic-bezier(.2,.8,.2,1);
+  z-index: 0;
+  pointer-events: none;
+}
+.suite-auth-tab {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  padding: 11px 14px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  border: 0;
+  cursor: pointer;
+  background: transparent;
+  color: var(--suite-neutral-700);
+  transition: color .3s ease, background-color .3s ease;
+}
+.suite-auth-tab + .suite-auth-tab { border-left: 1px solid var(--suite-divider); }
+.suite-auth-tab.is-active { color: #fff; }
+.suite-auth-tab:not(.is-active):hover { background: var(--suite-accent-100); color: var(--suite-accent-700); }
+
+.suite-auth-visual {
+  position: relative;
+  overflow: hidden;
+  background: var(--suite-accent);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 56px 64px;
+}
+.suite-auth-visual-grid {
+  position: absolute;
+  inset: -2px;
+  opacity: .3;
+  background-image: repeating-linear-gradient(to right, rgba(255,255,255,.85) 0 1px, transparent 1px 64px),
+                     repeating-linear-gradient(to bottom, rgba(255,255,255,.85) 0 1px, transparent 1px 64px);
+  animation: suiteDrift 22s linear infinite;
+  transition: transform .4s cubic-bezier(.2,.75,.2,1);
+}
+.suite-auth-sweep {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.suite-auth-sweep::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 0; width: 100%;
+  background: linear-gradient(104deg, rgba(255,255,255,0) 38%, rgba(255,255,255,.2) 50%, rgba(255,255,255,0) 62%);
+  animation: suiteSweep 9s ease-in-out infinite;
+}
+
+.suite-marquee-track {
+  overflow: hidden;
+  padding: 16px 0;
+}
+.suite-marquee-row {
+  display: flex;
+  gap: 26px;
+  width: max-content;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  animation: suiteMarquee 34s linear infinite;
+}
+
+.suite-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.suite-word > span {
+  display: inline-block;
+  animation: suiteWordIn .85s both cubic-bezier(.2,.8,.2,1);
+}
+
+.suite-stat-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+  background: rgba(255,255,255,.45);
+}
+.suite-stat-grid > div {
+  background: var(--suite-accent);
+  padding: 18px 0 6px 14px;
+}
+.suite-stat-grid > div:first-child { padding-left: 0; }
+.suite-stat-bar {
+  margin-top: 10px;
+  height: 3px;
+  background: rgba(255,255,255,.9);
+  transform-origin: left;
+  animation: suiteBarGrow 1.1s .6s both cubic-bezier(.2,.75,.2,1);
+}
+
+/* ---------- app shell ---------- */
+
+.suite-app {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.suite-sidebar {
+  background: #fff;
+  border-right: 2px solid var(--suite-text);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.suite-nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 20px;
+  border: 0;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+  background: transparent;
+  color: var(--suite-neutral-800);
+}
+.suite-nav-item.is-active {
+  border-left-color: var(--suite-accent);
+  background: var(--suite-accent-200);
+  color: var(--suite-accent-800);
+}
+.suite-nav-item .suite-nav-badge { font-size: 11px; font-weight: 800; color: var(--suite-neutral-600); }
+.suite-nav-item.is-active .suite-nav-badge { color: var(--suite-accent-800); }
+
+.suite-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.suite-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #fff;
+  border-bottom: 2px solid var(--suite-text);
+  padding: 0 var(--suite-pad);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 68px;
+  flex-wrap: wrap;
+}
+
+.suite-workspace {
+  padding: var(--suite-pad);
+  display: flex;
+  flex-direction: column;
+  gap: var(--suite-gap);
+  min-width: 0;
+}
+
+.suite-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px;
+  background: var(--suite-text);
+  border: 2px solid var(--suite-text);
+}
+@media (max-width: 900px) {
+  .suite-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.suite-kpi-grid > div { background: #fff; padding: 18px 18px 16px; }
+
+.suite-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: var(--suite-gap);
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .suite-split { grid-template-columns: 1fr; }
+}
+
+.suite-col { display: flex; flex-direction: column; gap: var(--suite-gap); min-width: 0; }
+
+.suite-notif-panel {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 320px;
+  background: #fff;
+  border: 1px solid var(--suite-text);
+  box-shadow: var(--suite-shadow-lg);
+  z-index: 30;
+}
+
+.suite-tilt { transition: transform .4s cubic-bezier(.2,.75,.2,1); }

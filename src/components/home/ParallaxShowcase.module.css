@@ -104,3 +104,19 @@
   color: white;
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.55);
 }
+
+/* The Keith Clark technique fakes depth via translateZ + perspective, which
+   moves layers at different speeds as the panel scrolls — a motion-parallax
+   effect that can trigger vestibular discomfort. Flatten it for users who
+   asked for reduced motion; native scrolling still works either way. */
+@media (prefers-reduced-motion: reduce) {
+  .parallax {
+    perspective: none;
+  }
+  .layerFore,
+  .layerBase,
+  .layerBack,
+  .layerDeep {
+    transform: none;
+  }
+}

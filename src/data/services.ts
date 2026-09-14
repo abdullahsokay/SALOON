@@ -5,6 +5,9 @@ export type Service = {
   summary: string;
   description: string;
   items: string[];
+  /** Hue (0-360) used to tint the FlipCard for this service; single source
+   * of truth so ServicesGrid and the services listing page can't drift. */
+  hue: number;
 };
 
 export const services: Service[] = [
@@ -16,6 +19,7 @@ export const services: Service[] = [
     description:
       "From precision cuts to full color transformations, our stylists blend international technique with an eye for what actually suits you — not just the trend of the week.",
     items: ["Haircut & styling", "Global & balayage color", "Keratin & smoothening", "Deep-repair treatments", "Blow-dry & styling"],
+    hue: 35,
   },
   {
     slug: "makeup",
@@ -25,6 +29,7 @@ export const services: Service[] = [
     description:
       "Whether it's a formal event or a full glam night out, our makeup artists work with skin-safe, long-wear products suited to Islamabad's climate and photography lighting alike.",
     items: ["Party makeup", "HD & airbrush makeup", "Editorial / photoshoot makeup", "Draping & hairstyling add-ons"],
+    hue: 42,
   },
   {
     slug: "bridal",
@@ -34,6 +39,7 @@ export const services: Service[] = [
     description:
       "Our bridal team handles every function from Mehndi to Baraat to Walima, with trial sessions available so your final look is never a surprise. Outstation services available across Pakistan.",
     items: ["Full bridal package (Mehndi–Baraat–Walima)", "Trial makeup session", "Hairstyling & draping", "Outstation services"],
+    hue: 28,
   },
   {
     slug: "nails",
@@ -43,6 +49,7 @@ export const services: Service[] = [
     description:
       "Relaxing, spa-style manicure and pedicure treatments with gel and classic polish options, finished with proper cuticle and skin care — not just polish.",
     items: ["Classic manicure / pedicure", "Gel polish", "Spa hand & foot treatment", "Nail art (on request)"],
+    hue: 45,
   },
   {
     slug: "facials",
@@ -52,6 +59,7 @@ export const services: Service[] = [
     description:
       "Skin treatments designed around your skin type, from deep-cleansing facials to brightening and anti-aging protocols using premium, dermatologically safe products.",
     items: ["Deep cleansing facial", "Brightening facial", "Anti-aging treatment", "Pre-bridal skin prep"],
+    hue: 38,
   },
   {
     slug: "waxing",
@@ -61,6 +69,7 @@ export const services: Service[] = [
     description:
       "Full-body waxing and precision threading in a clean, private studio environment, done efficiently without compromising on comfort.",
     items: ["Full body waxing", "Eyebrow & face threading", "Sensitive-skin friendly options"],
+    hue: 32,
   },
 ];
 

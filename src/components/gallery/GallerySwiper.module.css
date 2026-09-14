@@ -145,6 +145,17 @@
   background: var(--color-gold-light);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .left,
+  .right,
+  .heading,
+  .eyebrowCaption,
+  .paragraph {
+    transition-duration: 0.01s;
+    transition-delay: 0s;
+  }
+}
+
 @media (max-width: 768px) {
   .slide {
     flex-direction: column;

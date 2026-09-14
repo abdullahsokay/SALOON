@@ -1,27 +1,29 @@
 import Hero from "@/components/home/Hero";
-import ParallaxShowcase from "@/components/home/ParallaxShowcase";
 import TrustBar from "@/components/home/TrustBar";
+import About from "@/components/home/About";
+import MarqueeBanner from "@/components/home/MarqueeBanner";
 import ServicesGrid from "@/components/home/ServicesGrid";
-import Leadership from "@/components/home/Leadership";
-import WhyChooseUs from "@/components/home/WhyChooseUs";
+import Bridal from "@/components/home/Bridal";
 import GalleryTeaser from "@/components/home/GalleryTeaser";
 import Testimonials from "@/components/home/Testimonials";
+import BookingSection from "@/components/home/BookingSection";
 import LocationsHours from "@/components/home/LocationsHours";
-import MarqueeBanner from "@/components/home/MarqueeBanner";
+import Newsletter from "@/components/home/Newsletter";
 
 export default function Home() {
   return (
     <>
       <Hero />
-      <ParallaxShowcase />
       <TrustBar />
-      <ServicesGrid />
+      <About />
       <MarqueeBanner />
-      <Leadership />
-      <WhyChooseUs />
+      <ServicesGrid />
+      <Bridal />
       <GalleryTeaser />
       <Testimonials />
+      <BookingSection />
       <LocationsHours />
+      <Newsletter />
     </>
   );
 }

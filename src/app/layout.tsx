@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import SmoothScrollProvider from "@/components/layout/SmoothScrollProvider";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Jugnu's Salon & Studio — Luxury Beauty & Bridal, Islamabad",
@@ -26,11 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="flex min-h-full flex-col font-sans text-ink">
-        <SmoothScrollProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </SmoothScrollProvider>
+        {children}
       </body>
     </html>
   );

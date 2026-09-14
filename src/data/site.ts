@@ -12,7 +12,9 @@ export const site = {
   instagramHandle: "@jugnussalonf7",
   instagramUrl: "https://instagram.com/jugnussalonf7",
   instagramFollowers: "80.5K+",
-  facebookUrl: "#",
+  // No confirmed Facebook page yet — keep null so callers can hide the link
+  // instead of rendering a dead "#" href. Fill in once the client provides one.
+  facebookUrl: null as string | null,
   googleRating: "4.3",
   googleReviewCount: "1,213",
 };

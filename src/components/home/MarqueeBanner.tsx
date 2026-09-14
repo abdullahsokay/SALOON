@@ -1,6 +1,6 @@
 import styles from "./MarqueeBanner.module.css";
 
-const words = ["Hair", "Makeup", "Bridal", "Nails", "Facials", "Waxing", "Now Booking September–November"];
+const words = ["Hair", "Makeup", "Bridal", "Nails", "Skin", "Waxing", "Keratin", "Threading", "Outstation Bridal"];
 
 export default function MarqueeBanner() {
   const loop = [...words, ...words];

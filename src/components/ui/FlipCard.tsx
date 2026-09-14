@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import styles from "./FlipCard.module.css";
 import clsx from "clsx";
@@ -15,7 +16,7 @@ export default function FlipCard({
   image,
   details,
   hue = 38,
-  bookHref = "/contact",
+  bookHref = "/book",
   detailsHref,
 }: {
   title: string;
@@ -42,7 +43,7 @@ export default function FlipCard({
       <div className={styles.flip}>
         <div className={`${styles.side} ${styles.front}`}>
           <figure className={styles.figure}>
-            <img src={image} alt={title} />
+            <Image src={image} alt={title} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px" />
             <div className={styles.imgBg} />
             {detailsHref ? (
               <Link href={detailsHref} className={styles.caption}>
@@ -61,7 +62,7 @@ export default function FlipCard({
 
         <div className={`${styles.side} ${styles.back}`}>
           <figure className={styles.figure}>
-            <img src={image} alt="" />
+            <Image src={image} alt="" fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 300px" />
             <div className={styles.imgBg} />
           </figure>
           <Link href={bookHref} className={styles.bookBtn}>

@@ -59,7 +59,7 @@ export default async function ServiceCategoryPage({
                 </li>
               ))}
             </ul>
-            <Button href="/contact" className="mt-8">
+            <Button href="/book" className="mt-8">
               Book This Service
             </Button>
           </RevealOnScroll>
