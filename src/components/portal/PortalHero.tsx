@@ -30,20 +30,20 @@ export default function PortalHero({ nextFreeLabel }: { nextFreeLabel: string })
   const photoUrl = serviceImage("bridal", 0, 900);
 
   return (
-    <div style={{ position: "relative", width: "min(420px, 90vw)", height: "min(500px, 70vw)", margin: "0 auto" }}>
+    <div className="portal-rise" style={{ position: "relative", width: "min(420px, 90vw)", height: "min(500px, 70vw)", margin: "0 auto" }}>
       {canRender3D ? (
         <PortalHero3D photoUrl={photoUrl} />
       ) : (
-        <div style={{ position: "absolute", inset: 0, overflow: "hidden", border: "2px solid var(--portal-ink)" }}>
+        <div className="portal-rise" style={{ position: "absolute", inset: 0, overflow: "hidden", border: "2px solid var(--portal-ink)" }}>
           <Image src={photoUrl} alt="Jugnu's Salon & Studio" fill className="object-cover" sizes="420px" />
         </div>
       )}
 
-      <div style={{ position: "absolute", left: -22, bottom: 56, background: "var(--portal-paper)", border: "2px solid var(--portal-ink)", padding: "14px 18px", pointerEvents: "none" }}>
+      <div style={{ animation: "portalRise 0.6s cubic-bezier(.16,1,.3,1) 0.15s backwards, portalFloat 4.5s ease-in-out 0.75s infinite", position: "absolute", left: -22, bottom: 56, background: "var(--portal-paper)", border: "2px solid var(--portal-ink)", padding: "14px 18px", pointerEvents: "none" }}>
         <p style={{ margin: 0, fontSize: 10, fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--portal-mute)" }}>Next free slot</p>
         <p style={{ margin: "5px 0 0", fontSize: 22, fontWeight: 900, letterSpacing: "-.03em" }}>{nextFreeLabel}</p>
       </div>
-      <div style={{ position: "absolute", right: -18, top: 38, background: "var(--portal-accent)", color: "var(--portal-paper)", padding: "12px 16px", pointerEvents: "none" }}>
+      <div style={{ animation: "portalRise 0.6s cubic-bezier(.16,1,.3,1) 0.3s backwards, portalFloat 5.5s ease-in-out 0.9s infinite", position: "absolute", right: -18, top: 38, background: "var(--portal-accent)", color: "var(--portal-paper)", padding: "12px 16px", pointerEvents: "none" }}>
         <p style={{ margin: 0, fontSize: 13, fontWeight: 800, letterSpacing: "-.01em" }}>3 chairs open now</p>
       </div>
     </div>

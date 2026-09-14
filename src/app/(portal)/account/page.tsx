@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { logoutCustomer } from "@/lib/actions/auth";
 import { cancelPortalBooking, markNotificationsRead } from "@/lib/actions/bookings";
 import { packages } from "@/data/packages";
+import PointsRing from "@/components/portal/PointsRing";
+import ReferralCode from "@/components/portal/ReferralCode";
 
 export const metadata: Metadata = {
   title: "My Account — Jugnu's Salon & Studio",
@@ -41,7 +43,7 @@ export default async function AccountPage() {
 
   return (
     <main style={{ maxWidth: 1180, margin: "0 auto", padding: "clamp(28px,4vw,56px) clamp(16px,4vw,48px) clamp(60px,8vw,110px)" }}>
-      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20, marginBottom: 40 }}>
+      <div className="portal-rise" style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20, marginBottom: 40 }}>
         <span style={{ width: 72, height: 72, background: "var(--portal-accent)", color: "#f3f2f2", display: "grid", placeItems: "center", fontSize: 28, fontWeight: 900 }}>
           {user.name.charAt(0).toUpperCase()}
         </span>
@@ -55,20 +57,10 @@ export default async function AccountPage() {
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(230px,100%),1fr))", gap: "0 32px", marginBottom: 44 }}>
-        <div style={{ background: "var(--portal-paper)", borderTop: "3px solid var(--portal-ink)", padding: "24px 0 26px", display: "flex", alignItems: "center", gap: 18 }}>
-          <div style={{ width: 74, height: 74, flex: "0 0 74px", borderRadius: "50%", background: `conic-gradient(var(--portal-accent) ${pointsDeg}deg, #dcd9d9 0deg)`, display: "grid", placeItems: "center" }}>
-            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "var(--portal-paper)", display: "grid", placeItems: "center", fontSize: 15, fontWeight: 900, letterSpacing: "-.02em" }}>
-              {points}
-            </div>
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--portal-mute)" }}>Loyalty points</p>
-            <p style={{ margin: "5px 0 0", fontSize: 14, fontWeight: 700, lineHeight: 1.35 }}>{pointsHint}</p>
-          </div>
-        </div>
-        <Stat label="Upcoming" value={String(upcoming.length)} sub={upcoming.length ? `Next: ${upcoming[0].date} · ${upcoming[0].time}` : "Nothing booked"} />
-        <Stat label="Visits" value={String(history.length)} sub="Completed with us" />
-        <Stat label="Spent" value={`PKR ${lifetimeSpent.toLocaleString("en-US")}`} sub="Lifetime, both branches" />
+        <PointsRing points={points} pointsDeg={pointsDeg} pointsHint={pointsHint} />
+        <Stat label="Upcoming" value={String(upcoming.length)} sub={upcoming.length ? `Next: ${upcoming[0].date} · ${upcoming[0].time}` : "Nothing booked"} delay={80} />
+        <Stat label="Visits" value={String(history.length)} sub="Completed with us" delay={120} />
+        <Stat label="Spent" value={`PKR ${lifetimeSpent.toLocaleString("en-US")}`} sub="Lifetime, both branches" delay={160} />
       </div>
 
       <SectionHeading>Upcoming</SectionHeading>
@@ -79,8 +71,8 @@ export default async function AccountPage() {
         </div>
       )}
       <div style={{ display: "grid", gap: 12, marginBottom: 44 }}>
-        {upcoming.map((b) => (
-          <div key={b.id} style={{ border: "2px solid var(--portal-ink)", padding: 22, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(220px,100%),1fr))", gap: 20, alignItems: "center" }}>
+        {upcoming.map((b, i) => (
+          <div key={b.id} className="portal-card portal-rise" style={{ animationDelay: `${i * 40}ms`, border: "2px solid var(--portal-ink)", padding: 22, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(220px,100%),1fr))", gap: 20, alignItems: "center" }}>
             <div style={{ minWidth: 0 }}>
               <p style={{ margin: 0, fontSize: 20, fontWeight: 900, letterSpacing: "-.03em", lineHeight: 1.15 }}>{b.date} · {b.time}</p>
               <p style={{ margin: "6px 0 0", fontSize: 14, fontWeight: 600, color: "#444141" }}>{b.serviceName}</p>
@@ -109,10 +101,10 @@ export default async function AccountPage() {
 
       <SectionHeading>Your packages</SectionHeading>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(280px,100%),1fr))", gap: 12, marginBottom: 44 }}>
-        {ownedPackages.map((op) => {
+        {ownedPackages.map((op, i) => {
           const def = packages.find((p) => p.slug === op.packageSlug);
           return (
-            <div key={op.id} style={{ background: "#eae9e9", padding: 22 }}>
+            <div key={op.id} className="portal-card portal-rise" style={{ animationDelay: `${i * 40}ms`, background: "#eae9e9", padding: 22 }}>
               <p style={{ margin: 0, fontSize: 10, fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "var(--portal-mute)" }}>{def?.tag ?? "Package"}</p>
               <h3 style={{ margin: "8px 0 0", fontSize: 19, fontWeight: 800, letterSpacing: "-.025em" }}>{def?.title ?? op.packageSlug}</h3>
               <p style={{ margin: "10px 0 0", fontSize: 14, fontWeight: 700, color: "var(--portal-accent)" }}>{op.status}</p>
@@ -132,9 +124,7 @@ export default async function AccountPage() {
         <p style={{ margin: "12px 0 0", fontSize: 16, lineHeight: 1.45, maxWidth: "44ch" }}>
           Share your code. Your friend gets PKR 500 off their first visit, you get PKR 500 credit.
         </p>
-        <p style={{ margin: "18px 0 0", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 26, fontWeight: 700, letterSpacing: ".04em", background: "var(--portal-ink)", padding: "12px 16px", display: "inline-block" }}>
-          {user.referralCode}
-        </p>
+        <ReferralCode code={user.referralCode ?? ""} />
       </div>
 
       <SectionHeading>Visit history</SectionHeading>
@@ -167,8 +157,8 @@ export default async function AccountPage() {
         {notifications.length === 0 ? (
           <p style={{ padding: 18, fontSize: 14, color: "var(--portal-mute)" }}>No updates yet.</p>
         ) : (
-          notifications.map((n) => (
-            <div key={n.id} style={{ padding: 18, borderBottom: "1px solid var(--portal-line)", background: n.read ? "transparent" : "rgba(236,48,19,.05)" }}>
+          notifications.map((n, i) => (
+            <div key={n.id} className="portal-rise" style={{ animationDelay: `${i * 30}ms`, padding: 18, borderBottom: "1px solid var(--portal-line)", background: n.read ? "transparent" : "rgba(236,48,19,.05)" }}>
               <p style={{ margin: 0, fontSize: 14, fontWeight: 700 }}>{n.title}</p>
               <p style={{ margin: "4px 0 0", fontSize: 14, color: "var(--portal-mute)" }}>{n.body}</p>
             </div>
@@ -179,9 +169,9 @@ export default async function AccountPage() {
   );
 }
 
-function Stat({ label, value, sub }: { label: string; value: string; sub: string }) {
+function Stat({ label, value, sub, delay = 0 }: { label: string; value: string; sub: string; delay?: number }) {
   return (
-    <div style={{ background: "var(--portal-paper)", borderTop: "3px solid var(--portal-ink)", padding: "24px 0 26px" }}>
+    <div className="portal-rise" style={{ animationDelay: `${delay}ms`, background: "var(--portal-paper)", borderTop: "3px solid var(--portal-ink)", padding: "24px 0 26px" }}>
       <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "var(--portal-mute)" }}>{label}</p>
       <p style={{ margin: "8px 0 0", fontSize: 30, fontWeight: 900, letterSpacing: "-.035em", lineHeight: 1 }}>{value}</p>
       <p style={{ margin: "6px 0 0", fontSize: 13, fontWeight: 600, color: "var(--portal-mute)" }}>{sub}</p>

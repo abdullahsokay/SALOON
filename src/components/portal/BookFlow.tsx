@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useActionState } from "react";
 import { createPortalBooking } from "@/lib/actions/bookings";
+import Confetti from "./Confetti";
 
 export interface PortalService {
   id: string;
@@ -63,6 +64,7 @@ export default function BookFlow({
   initialPhone: string;
 }) {
   const [step, setStep] = useState(0);
+  const [dir, setDir] = useState<"fwd" | "back">("fwd");
   // One service per booking — matches the Booking model everywhere else in
   // the system (Suite appointments, online-request accept/decline all
   // assume a single serviceName/price per row), so this is a single choice,
@@ -108,17 +110,25 @@ export default function BookFlow({
     return Array.from(byCategory.entries()).map(([name, items]) => ({ name, items }));
   }, [services]);
 
+  function onGlowMove(e: React.MouseEvent<HTMLButtonElement>) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  }
+
   function selectService(id: string) {
     setSelectedServiceId(id);
     setSlot(null);
   }
 
   function next() {
+    setDir("fwd");
     if (step === 0) { if (!selectedServiceId) return; setStep(1); return; }
     if (step === 1) { setStep(2); return; }
     if (step === 2) { if (!slot) return; setStep(3); return; }
   }
   function prev() {
+    setDir("back");
     setStep((s) => Math.max(0, s - 1));
   }
 
@@ -144,12 +154,23 @@ export default function BookFlow({
   if (state?.ref) {
     return (
       <div style={{ maxWidth: 560, margin: "0 auto", padding: "80px 16px", textAlign: "center" }}>
-        <p style={{ margin: "0 0 10px", fontSize: 12, fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--portal-accent)" }}>Request sent</p>
-        <h1 style={{ margin: "0 0 16px", fontSize: 36, fontWeight: 900, letterSpacing: "-.03em" }}>Your slot is held.</h1>
-        <p style={{ margin: "0 0 28px", fontSize: 16, lineHeight: 1.5, color: "var(--portal-mute)" }}>
+        <Confetti />
+        <svg width="84" height="84" viewBox="0 0 84 84" style={{ margin: "0 auto 22px", animation: "portalPop 0.5s cubic-bezier(.34,1.56,.64,1) backwards" }}>
+          <circle
+            cx="42" cy="42" r="38" fill="none" stroke="var(--portal-accent)" strokeWidth="4"
+            style={{ strokeDasharray: 240, strokeDashoffset: 240, animation: "portalDraw 0.7s ease-out 0.15s forwards" }}
+          />
+          <path
+            d="M23 44 L36 57 L60 28" fill="none" stroke="var(--portal-accent)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round"
+            style={{ strokeDasharray: 60, strokeDashoffset: 60, animation: "portalDraw 0.4s ease-out 0.75s forwards" }}
+          />
+        </svg>
+        <p className="portal-rise" style={{ animationDelay: "0.55s", margin: "0 0 10px", fontSize: 12, fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--portal-accent)" }}>Request sent</p>
+        <h1 className="portal-rise" style={{ animationDelay: "0.62s", margin: "0 0 16px", fontSize: 36, fontWeight: 900, letterSpacing: "-.03em" }}>Your slot is held.</h1>
+        <p className="portal-rise" style={{ animationDelay: "0.69s", margin: "0 0 28px", fontSize: 16, lineHeight: 1.5, color: "var(--portal-mute)" }}>
           {money(deposit)} advance received. Our team will confirm within the hour — track it any time from your account.
         </p>
-        <a href="/account" className="portal-btn portal-btn-primary">View my bookings</a>
+        <a href="/account" className="portal-btn portal-btn-primary portal-rise" style={{ animationDelay: "0.76s" }}>View my bookings</a>
       </div>
     );
   }
@@ -166,7 +187,7 @@ export default function BookFlow({
               key={label}
               type="button"
               disabled={i > step}
-              onClick={() => { if (i < step) setStep(i); }}
+              onClick={() => { if (i < step) { setDir("back"); setStep(i); } }}
               style={{
                 flex: 1, minWidth: 0, border: 0, padding: "14px 12px", textAlign: "left", fontSize: 13, fontWeight: 800, letterSpacing: "-.01em",
                 whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
@@ -180,6 +201,7 @@ export default function BookFlow({
           ))}
         </div>
 
+        <div key={`${step}-${dir}`} className={dir === "fwd" ? "portal-slide-in-right" : "portal-slide-in-left"}>
         {step === 0 && (
           <div>
             {groups.map((g) => (
@@ -188,14 +210,17 @@ export default function BookFlow({
                   {g.name}
                 </h2>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(300px,100%),1fr))", gap: 12 }}>
-                  {g.items.map((s) => {
+                  {g.items.map((s, i) => {
                     const on = selectedServiceId === s.id;
                     return (
                       <button
                         key={s.id}
                         type="button"
                         onClick={() => selectService(s.id)}
+                        onMouseMove={onGlowMove}
+                        className="portal-choice portal-glow-card portal-rise"
                         style={{
+                          animationDelay: `${i * 30}ms`,
                           textAlign: "left", padding: 18, cursor: "pointer", display: "flex", alignItems: "center", gap: 16,
                           border: `2px solid ${on ? "var(--portal-ink)" : "var(--portal-line)"}`,
                           background: on ? "var(--portal-ink)" : "var(--portal-paper)",
@@ -226,14 +251,17 @@ export default function BookFlow({
 
         {step === 1 && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(280px,100%),1fr))", gap: 12 }}>
-            {stylistOptions.map((t) => {
+            {stylistOptions.map((t, i) => {
               const on = stylistId === t.id;
               return (
                 <button
                   key={t.id}
                   type="button"
-                  onClick={() => { setStylistId(t.id); setSlot(null); setStep(2); }}
+                  onClick={() => { setDir("fwd"); setStylistId(t.id); setSlot(null); setStep(2); }}
+                  onMouseMove={onGlowMove}
+                  className="portal-choice portal-glow-card portal-rise"
                   style={{
+                    animationDelay: `${i * 30}ms`,
                     textAlign: "left", padding: 22, cursor: "pointer", display: "flex", flexDirection: "column", gap: 14,
                     border: `2px solid ${on ? "var(--portal-ink)" : "var(--portal-line)"}`,
                     background: on ? "var(--portal-ink)" : "var(--portal-paper)",
@@ -266,6 +294,7 @@ export default function BookFlow({
                     key={i}
                     type="button"
                     onClick={() => { setDateIdx(i); setSlot(null); }}
+                    className="portal-choice"
                     style={{
                       flex: "0 0 auto", padding: "12px 16px", cursor: "pointer", textAlign: "center", minWidth: 74,
                       border: `2px solid ${on ? "var(--portal-ink)" : "var(--portal-line)"}`,
@@ -296,6 +325,7 @@ export default function BookFlow({
                     type="button"
                     disabled={!s.free}
                     onClick={() => s.free && setSlot(s.t)}
+                    className="portal-choice"
                     style={{
                       padding: "15px 8px", fontSize: 15, fontWeight: 800, letterSpacing: "-.01em",
                       cursor: s.free ? "pointer" : "not-allowed",
@@ -368,6 +398,7 @@ export default function BookFlow({
                         key={p.id}
                         type="button"
                         onClick={() => setPay(p.id)}
+                        className="portal-choice"
                         style={{
                           textAlign: "left", padding: "16px 18px", cursor: "pointer", display: "flex", alignItems: "center", gap: 14,
                           border: `2px solid ${on ? "var(--portal-ink)" : "var(--portal-line)"}`,
@@ -405,9 +436,10 @@ export default function BookFlow({
             )}
           </div>
         )}
+        </div>
       </div>
 
-      <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "var(--portal-ink)", color: "#f3f2f2", padding: "16px clamp(16px,4vw,48px)", display: "flex", alignItems: "center", gap: 20, zIndex: 70, flexWrap: "wrap" }}>
+      <div className="portal-rise" style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "var(--portal-ink)", color: "#f3f2f2", padding: "16px clamp(16px,4vw,48px)", display: "flex", alignItems: "center", gap: 20, zIndex: 70, flexWrap: "wrap" }}>
         <div style={{ minWidth: 0, flex: 1 }}>
           <p style={{ margin: 0, fontSize: 11, fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#9b9797" }}>{barLabel}</p>
           <p style={{ margin: "4px 0 0", fontSize: 19, fontWeight: 900, letterSpacing: "-.03em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{barValue}</p>

@@ -10,31 +10,44 @@ export default function AccountLoginPage() {
   const [signupState, signupAction, signupPending] = useActionState(signupCustomer, undefined);
 
   return (
-    <section style={{ maxWidth: 460, margin: "0 auto", padding: "calc(70px + clamp(28px,4vw,56px)) 16px clamp(60px,8vw,110px)" }}>
+    <section className="portal-rise" style={{ maxWidth: 460, margin: "0 auto", padding: "calc(70px + clamp(28px,4vw,56px)) 16px clamp(60px,8vw,110px)" }}>
       <div style={{ marginBottom: 32, textAlign: "center" }}>
         <p style={{ margin: "0 0 8px", fontSize: 12, fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "var(--portal-accent)" }}>Client Portal</p>
         <h1 style={{ margin: 0, fontSize: 30, fontWeight: 900, letterSpacing: "-.04em" }}>Book &amp; manage your visits</h1>
       </div>
 
-      <div style={{ display: "flex", border: "2px solid var(--portal-ink)", marginBottom: 24 }}>
+      <div style={{ position: "relative", display: "flex", border: "2px solid var(--portal-ink)", marginBottom: 24, overflow: "hidden" }}>
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            width: "50%",
+            background: "var(--portal-ink)",
+            transform: tab === "signup" ? "translateX(100%)" : "translateX(0%)",
+            transition: "transform 0.35s cubic-bezier(0.65,0,0.35,1)",
+          }}
+        />
         <button
           type="button"
           onClick={() => setTab("signin")}
-          style={{ flex: 1, padding: "14px 12px", cursor: "pointer", fontSize: 13, fontWeight: 800, border: 0, background: tab === "signin" ? "var(--portal-ink)" : "transparent", color: tab === "signin" ? "#f3f2f2" : "var(--portal-mute)" }}
+          style={{ position: "relative", flex: 1, padding: "14px 12px", cursor: "pointer", fontSize: 13, fontWeight: 800, border: 0, background: "transparent", color: tab === "signin" ? "#f3f2f2" : "var(--portal-mute)" }}
         >
           Sign in
         </button>
         <button
           type="button"
           onClick={() => setTab("signup")}
-          style={{ flex: 1, padding: "14px 12px", cursor: "pointer", fontSize: 13, fontWeight: 800, border: 0, borderLeft: "2px solid var(--portal-ink)", background: tab === "signup" ? "var(--portal-ink)" : "transparent", color: tab === "signup" ? "#f3f2f2" : "var(--portal-mute)" }}
+          style={{ position: "relative", flex: 1, padding: "14px 12px", cursor: "pointer", fontSize: 13, fontWeight: 800, border: 0, borderLeft: "2px solid var(--portal-ink)", background: "transparent", color: tab === "signup" ? "#f3f2f2" : "var(--portal-mute)" }}
         >
           Create account
         </button>
       </div>
 
       {tab === "signin" ? (
-        <form action={loginAction} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <form key="signin" action={loginAction} className="portal-slide-in-left" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <Field label="Email" name="email" type="email" placeholder="you@example.com" errors={loginState?.errors?.email} />
           <Field label="Password" name="password" type="password" errors={loginState?.errors?.password} />
           {loginState?.message && <p style={{ fontSize: 13, fontWeight: 700, color: "#b4342a" }}>{loginState.message}</p>}
@@ -43,7 +56,7 @@ export default function AccountLoginPage() {
           </button>
         </form>
       ) : (
-        <form action={signupAction} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <form key="signup" action={signupAction} className="portal-slide-in-right" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <Field label="Full name" name="name" placeholder="e.g. Mariam Siddiqui" errors={signupState?.errors?.name} />
           <Field label="Email" name="email" type="email" placeholder="you@example.com" errors={signupState?.errors?.email} />
           <Field label="Phone" name="phone" type="tel" placeholder="0300-1234567" errors={signupState?.errors?.phone} />

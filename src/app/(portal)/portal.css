@@ -41,6 +41,28 @@
   color: var(--portal-paper);
 }
 
+/* Baseline: every interactive element gets a smooth transition on the
+   properties this app swaps via inline style (background/color/border on
+   selection), so state changes glide instead of snapping. Scoped to
+   button/a only — safe as a blanket rule since it just adds `transition`,
+   never changes a resting appearance. */
+.portal-root button,
+.portal-root a {
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+    transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, filter 0.15s ease;
+}
+
+/* Selectable "choice" cards — service/stylist/date/slot/payment buttons in
+   BookFlow, package cards. Adds the lift + shadow the plain color-swap
+   states don't give on their own. */
+.portal-choice:not(:disabled):hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px -20px rgba(32, 30, 29, 0.45);
+}
+.portal-choice:not(:disabled):active {
+  transform: translateY(-1px) scale(0.99);
+}
+
 .portal-btn {
   display: inline-flex;
   align-items: center;
@@ -93,10 +115,16 @@
   font-size: 15px;
   font-weight: 700;
   color: var(--portal-ink);
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
 }
 .portal-input::placeholder {
   color: var(--portal-mute);
   font-weight: 600;
+}
+.portal-input:focus-visible {
+  outline: none;
+  border-color: var(--portal-accent);
+  box-shadow: 0 0 0 4px rgba(236, 48, 19, 0.15);
 }
 
 @keyframes portalRise {
@@ -107,6 +135,101 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.35; }
 }
+@keyframes portalSlideInRight {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes portalSlideInLeft {
+  from { opacity: 0; transform: translateX(-28px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes portalFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes portalConfettiFall {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--dx, 0px), 100vh) rotate(720deg); opacity: 0; }
+}
+@keyframes portalDraw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes portalPop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Entrance utilities — one-shot on mount, `backwards` so the element stays
+   at its `from` state during any `animation-delay` instead of flashing. */
+.portal-rise {
+  animation: portalRise 0.55s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.portal-slide-in-right {
+  animation: portalSlideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.portal-slide-in-left {
+  animation: portalSlideInLeft 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.portal-float {
+  animation: portalFloat 4.5s ease-in-out infinite;
+}
+
+/* Card hover — booking/package/notification rows. */
+.portal-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.portal-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px -22px rgba(32, 30, 29, 0.4);
+}
+
+/* Cursor-tracked spotlight glow — --mx/--my set via onMouseMove (see
+   PackageCard.tsx and the BookFlow choice buttons). isolate + z-index so
+   the glow sits behind the card's own content regardless of paint order. */
+.portal-glow-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.portal-glow-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgba(236, 48, 19, 0.22), transparent 70%);
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.portal-glow-card:hover::before {
+  opacity: 1;
+}
+.portal-glow-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Underline-on-hover for the nav's plain text links. */
+.portal-nav-link {
+  position: relative;
+}
+.portal-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 4px;
+  height: 2px;
+  background: var(--portal-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.portal-nav-link:hover::after {
+  transform: scaleX(1);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .portal-root *, .portal-root *::before, .portal-root *::after {
     animation-duration: 0.001s !important;
