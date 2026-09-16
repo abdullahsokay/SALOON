@@ -1,13 +1,13 @@
 // One-time / re-runnable seed for local dev — populates the demo staff
 // account, the bookable Service catalog, and the Stylist roster. All writes
 // are upserts, so `npm run db:seed` is safe to run again after a schema
-// change or a wiped dev.db.
+// change or a reset database.
 import "dotenv/config";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
-import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { PrismaPg } from "@prisma/adapter-pg";
 
-const adapter = new PrismaLibSql({ url: process.env.DATABASE_URL! });
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 // Mirrors lib/suite-data.ts's INITIAL_SERVICES — the Suite's own mock catalog
